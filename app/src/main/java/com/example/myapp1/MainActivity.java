@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String [] operators = {"+", "-", "/", "*"};
     TextView question, resultText;
     Button option1, option2;
+    //int numOfQuestions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +30,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         question = findViewById(R.id.Question);
         option1 = findViewById(R.id.Option1);
         option2 = findViewById(R.id.Option2);
+        resultText = findViewById(R.id.Result);
         option1.setOnClickListener(this);
         option2.setOnClickListener(this);
         question.setText(formExpression()+"=?");
         fillOptions();
+        //numOfQuestions=4;
         repeat();
         System.out.println("In onClick");
     }
@@ -107,11 +110,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void repeat()
     {
+        //if (numOfQuestions == 0)
+          //  return;
+        //numOfQuestions--;
         question.setText(formExpression()+"=?");
         fillOptions();
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View view) {
         System.out.println("In onClick");
