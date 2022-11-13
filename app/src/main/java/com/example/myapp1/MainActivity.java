@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
 
     boolean arithmeticExceptionFlag = false;
@@ -21,6 +21,37 @@ public class MainActivity extends AppCompatActivity
     String [] operators = {"+", "-", "/", "*"};
     TextView question, resultText;
     Button option1, option2;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        question = findViewById(R.id.Question);
+        option1 = findViewById(R.id.Option1);
+        option2 = findViewById(R.id.Option2);
+        question.setText(formExpression()+"=?");
+        fillOptions();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.Option1:
+                if (correctOption == 0)
+                    resultText.setText("Correct!");
+                else
+                    resultText.setText("Wrong!");
+                break;
+
+            case R.id.Option2:
+                if (correctOption == 1)
+                    resultText.setText("Correct!");
+                else
+                    resultText.setText("Wrong!");
+                break;
+
+        }
+    }
 
     private String formExpression()
     {
@@ -48,7 +79,8 @@ public class MainActivity extends AppCompatActivity
                 else
                 {
                     option1.setText(Double.toString(ans));
-                    option2.setText(rnd.nextInt(1000));
+                    double vary = ans - rnd.nextInt(20);
+                    option2.setText(Double.toString(vary));
                 }
                 break;
             case 1:
@@ -59,7 +91,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 {
-                    option1.setText(rnd.nextInt(1000));
+                    double vary = ans - rnd.nextInt(20);
+                    option1.setText(Double.toString(vary));
                     option2.setText(Double.toString(ans));
                 }
                 break;
@@ -86,29 +119,5 @@ public class MainActivity extends AppCompatActivity
                 return operand1*operand2;
         }
         return 0;
-    }
-
-    @Override
-    public void OnClick(View view)
-    {
-        switch (view.getId())
-        {
-            case R.id.Option1:
-                if (correctOption==0)
-                    resultText.setText();
-
-        }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        question = findViewById(R.id.Question);
-        option1 = findViewById(R.id.Option1);
-        option2 = findViewById(R.id.Option2);
-        question.setText(formExpression()+"=? ");
-        fillOptions();
-        resultText = findViewById(R.id.Result);
     }
 }
