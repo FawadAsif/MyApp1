@@ -29,28 +29,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         question = findViewById(R.id.Question);
         option1 = findViewById(R.id.Option1);
         option2 = findViewById(R.id.Option2);
+        option1.setOnClickListener(this);
+        option2.setOnClickListener(this);
         question.setText(formExpression()+"=?");
         fillOptions();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.Option1:
-                if (correctOption == 0)
-                    resultText.setText("Correct!");
-                else
-                    resultText.setText("Wrong!");
-                break;
-
-            case R.id.Option2:
-                if (correctOption == 1)
-                    resultText.setText("Correct!");
-                else
-                    resultText.setText("Wrong!");
-                break;
-
-        }
+        repeat();
+        System.out.println("In onClick");
     }
 
     private String formExpression()
@@ -119,5 +103,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return operand1*operand2;
         }
         return 0;
+    }
+
+    private void repeat()
+    {
+        question.setText(formExpression()+"=?");
+        fillOptions();
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onClick(View view) {
+        System.out.println("In onClick");
+        switch (view.getId()) {
+            case R.id.Option1:
+                if (correctOption == 0)
+                    resultText.setText("Correct!");
+                else
+                    resultText.setText("Wrong!");
+                break;
+
+            case R.id.Option2:
+                if (correctOption == 1)
+                    resultText.setText("Correct!");
+                else
+                    resultText.setText("Wrong!");
+                break;
+        }
+        repeat();
     }
 }
