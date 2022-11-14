@@ -11,17 +11,19 @@ import android.widget.TextView;
 
 import java.util.Random;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
 
-    boolean arithmeticExceptionFlag = false;
+    boolean[] arithmeticExceptionFlag = {false, false, false, false, false};
     int operand1, operand2;
     int correctOption;
+    Double [] correctAnswers, userAnswers;
     String operator;
     String [] operators = {"+", "-", "/", "*"};
     TextView question, resultText;
     Button option1, option2;
-    //int numOfQuestions;
+    int questionsAsked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +35,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resultText = findViewById(R.id.Result);
         option1.setOnClickListener(this);
         option2.setOnClickListener(this);
-        question.setText(formExpression()+"=?");
+        questionsAsked=1;
+        question.setText(questionsAsked++ +".   "+formExpression()+"=?");
         fillOptions();
-        //numOfQuestions=4;
         repeat();
-        System.out.println("In onClick");
+        //System.out.println("In onClick");
     }
 
     private String formExpression()
@@ -55,30 +57,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Random rnd = new Random();
         correctOption = rnd.nextInt(2);
         double ans = performOperation();
+        correctAnswers[questionsAsked-1] = ans;
         switch (correctOption)
         {
             case 0:
-                if (arithmeticExceptionFlag)
+                if (arithmeticExceptionFlag[questionsAsked-1])
                 {
                     option1.setText("Undefined");
-                    arithmeticExceptionFlag=false;
+                    correctAnswers[questionsAsked-1] = 0.0;
                 }
                 else
                 {
                     option1.setText(Double.toString(ans));
-                    double vary = ans - rnd.nextInt(20);
+                    double vary = ans - rnd.nextInt(10);
                     option2.setText(Double.toString(vary));
                 }
                 break;
             case 1:
-                if (arithmeticExceptionFlag)
+                if (arithmeticExceptionFlag[questionsAsked-1])
                 {
                     option2.setText("Undefined");
-                    arithmeticExceptionFlag=false;
+                    correctAnswers[questionsAsked-1] = 0.0;
                 }
                 else
                 {
-                    double vary = ans - rnd.nextInt(20);
+                    double vary = ans - rnd.nextInt(10);
                     option1.setText(Double.toString(vary));
                     option2.setText(Double.toString(ans));
                 }
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case "/":
                 if (operand2 == 0)
                 {
-                    arithmeticExceptionFlag = true;
+                    arithmeticExceptionFlag[questionsAsked-1] = true;
                     return 0;
                 }
                 return operand1 / operand2;
@@ -110,22 +113,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void repeat()
     {
-        //if (numOfQuestions == 0)
-          //  return;
-        //numOfQuestions--;
-        question.setText(formExpression()+"=?");
+        question.setText(questionsAsked++ + formExpression()+"=?");
         fillOptions();
     }
 
     @Override
     public void onClick(View view) {
-        System.out.println("In onClick");
+        //System.out.println("In onClick");
         switch (view.getId()) {
             case R.id.Option1:
                 if (correctOption == 0)
                     resultText.setText("Correct!");
                 else
                     resultText.setText("Wrong!");
+                userAnswers[questionsAsked-1] = Double.parseDouble(option1.getText().toString());
                 break;
 
             case R.id.Option2:
@@ -133,8 +134,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     resultText.setText("Correct!");
                 else
                     resultText.setText("Wrong!");
+                userAnswers[questionsAsked-1] = Double.parseDouble(option2.getText().toString());
                 break;
         }
-        repeat();
+        if (questionsAsked<=5)
+            repeat();
     }
 }
